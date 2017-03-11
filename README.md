@@ -8,6 +8,10 @@
 
 Displays notifications for newly published packages
 
+![Screenshot](https://raw.githubusercontent.com/idleberg/atom-package-notifier/master/screenshot.png)
+
+*See it in action (theme is [Hopscotch](https://atom.io/themes/hopscotch))*
+
 ## Installation
 
 ### apm
