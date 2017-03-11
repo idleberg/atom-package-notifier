@@ -13,23 +13,23 @@ module.exports = PackageNotifier =
       default: true
       order: 0
     updateInterval:
-      description: "Minutes until the next check for new packages runs"
+      description: "Minutes until the next check for new packages runs (maximum: 1140)"
       type: 'integer'
       default: 15
       minimum: 1
       maximum: 1140
       order: 1
-    maximumItems:
+    maximumPackages:
       title: "Maximum Packages"
-      description: "Limit the number of notifications displayed"
+      description: "Limit the number of notifications displayed (maximum: 45)"
       type: 'integer'
       default: 6
       minimum: 1
       maximum: 45
       order: 2
-    dismissNotification:
-      title: "Dismiss Notification"
-      description: "Automatically dismiss the update notification after 5 seconds"
+    dismissNotifications:
+      title: "Dismiss Notifications"
+      description: "Automatically dismiss the update notifications after 5 seconds"
       type: "boolean"
       default: false
       order: 3
@@ -84,18 +84,18 @@ module.exports = PackageNotifier =
       stream = this
       item = undefined
       lastUpdateTime = localStorage.getItem("#{meta.name}.lastUpdateTime") || 0
-      maximumItems = atom.config.get("#{meta.name}.maximumItems")
+      maximumPackages = atom.config.get("#{meta.name}.maximumPackages")
 
       while item = stream.read()
         packageCounter++
         
-        if packageCounter > maximumItems
+        if packageCounter > maximumPackages
           localStorage.setItem("#{meta.name}.lastUpdateTime", d.getTime().toString())
           break
 
         if forceNotifications is true or Date.parse(item.pubDate) > lastUpdateTime
           atom.notifications.addInfo(
             "**[#{item.title}](#{item.link})** by [#{item.author}](https://atom.io/users/#{item.author})",
-            dismissable: !atom.config.get("#{meta.name}.dismissNotification")
+            dismissable: !atom.config.get("#{meta.name}.dismissNotifications")
           )
       return

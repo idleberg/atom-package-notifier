@@ -6,7 +6,7 @@
 [![Travis](https://img.shields.io/travis/idleberg/atom-package-notifier.svg?style=flat-square)](https://travis-ci.org/idleberg/atom-package-notifier)
 [![David](https://img.shields.io/david/dev/idleberg/atom-package-notifier.svg?style=flat-square)](https://david-dm.org/idleberg/atom-package-notifier?type=dev)
 
-Displays a notification for newly published packages
+Displays notifications for newly published packages
 
 ## Installation
 
