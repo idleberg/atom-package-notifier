@@ -41,6 +41,12 @@ module.exports = PackageNotifier =
       type: "boolean"
       default: false
       order: 4
+    suppressError:
+      title: "Suppress Errors"
+      description: "Don't show error notifications, errors will be shown in the console instead"
+      type: "boolean"
+      default: false
+      order: 5
   subscriptions: null
 
   activate: ->
@@ -64,7 +70,7 @@ module.exports = PackageNotifier =
     @subscriptions?.dispose()
     @subscriptions = null
 
-  getFeed: (forceNotifications = false)->
+  getFeed: (forceNotifications = false) ->
     FeedParser = require('feedparser')
     request = require('request')
 
@@ -74,12 +80,14 @@ module.exports = PackageNotifier =
     packageCounter = 0
 
     packageFeed.on 'error', (error) ->
-      return atom.notifications.addError(
-        meta.name,
-        detail: error
-        dismissable: true
-      )
-      return
+      if atom.config.get("#{meta.name}.suppressError") isnt true
+        return atom.notifications.addError(
+          meta.name,
+          detail: error
+          dismissable: true
+        )
+      else
+        return console.error error
 
     packageFeed.on 'response', (res) ->
       stream = this
@@ -90,11 +98,14 @@ module.exports = PackageNotifier =
       return
 
     feedparser.on 'error', (error) ->
-      return atom.notifications.addError(
-        meta.name,
-        detail: error
-        dismissable: true
-      )
+      if atom.config.get("#{meta.name}.suppressError") isnt true
+        return atom.notifications.addError(
+          meta.name,
+          detail: error
+          dismissable: true
+        )
+      else
+        return console.error error
 
     feedparser.on 'readable', ->
       stream = this
